@@ -35,64 +35,60 @@ class _RegisterViewState extends State<RegisterView> {
         title: const Text('Register'),
         backgroundColor: Colors.blue,
       ),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        ),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              return Column(
-                children: [
-                  TextField(
-                    controller: _email,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      hintText: 'Please enter your email',
-                    ),
-                  ),
-                  TextField(
-                    controller: _password,
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    decoration: const InputDecoration(
-                      hintText: 'Please enter your password',
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      final email = _email.text;
-                      final password = _password.text;
-                      try {
-                        final credential = await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                              email: email,
-                              password: password,
-                            );
-                        print(credential);
-                      } on FirebaseAuthException catch (e) {
-                        print(e.code);
-                        if (e.code == 'weak-password') {
-                          print('Weak password');
-                        } else if (e.code == 'email-already-in-use') {
-                          print('Email already in use');
-                        } else {
-                          print('Something else happened');
-                          print(e);
-                        }
-                      }
-                    },
-                    child: Text('Register'),
-                  ),
-                ],
-              );
-            default:
-              return const Text('Loading.....😀');
-          }
-        },
+      body: Column(
+        children: [
+          TextField(
+            controller: _email,
+            enableSuggestions: false,
+            autocorrect: false,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(
+              hintText: 'Please enter your email',
+            ),
+          ),
+          TextField(
+            controller: _password,
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            decoration: const InputDecoration(
+              hintText: 'Please enter your password',
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              final email = _email.text;
+              final password = _password.text;
+              try {
+                final credential = await FirebaseAuth.instance
+                    .createUserWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
+                print(credential);
+              } on FirebaseAuthException catch (e) {
+                print(e.code);
+                if (e.code == 'weak-password') {
+                  print('Weak password');
+                } else if (e.code == 'email-already-in-use') {
+                  print('Email already in use');
+                } else {
+                  print('Something else happened');
+                  print(e);
+                }
+              }
+            },
+            child: Text('Register'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).pushNamedAndRemoveUntil('/login/', (route) => false);
+            },
+            child: const Text('Already Registered? Login Here'),
+          ),
+        ],
       ),
     );
   }
