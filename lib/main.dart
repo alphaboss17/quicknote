@@ -1,7 +1,10 @@
+// ignore_for_file: unused_import
+
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:quicknote/constants/routes.dart';
 import 'package:quicknote/firebase_options.dart';
 import 'package:quicknote/views/login_view.dart';
 import 'package:quicknote/views/register_view.dart';
@@ -17,8 +20,10 @@ void main() {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const HomePage(),
       routes: {
-        '/login/': (context) => const LoginView(),
-        '/register/': (context) => const RegisterView(),
+        //page routes
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
+        notesRoute: (contex) => const NotesView(),
       },
     ),
   );
@@ -82,7 +87,7 @@ class _NotesViewState extends State<NotesView> {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(
                       context,
-                    ).pushNamedAndRemoveUntil('/login/', (_) => false);
+                    ).pushNamedAndRemoveUntil(loginRoute, (_) => false);
                   }
               }
             },
