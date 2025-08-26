@@ -1,5 +1,4 @@
 // ignore_for_file: unused_import
-
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +22,7 @@ void main() {
         //page routes
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),
-        notesRoute: (contex) => const NotesView(),
+        notesRoute: (context) => const NotesView(),
       },
     ),
   );
