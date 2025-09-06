@@ -26,6 +26,7 @@ class _NotesViewState extends State<NotesView> {
                   if (shouldLogout) {
                     await AuthService.firebase().logOut();
                     Navigator.of(
+                      // ignore: use_build_context_synchronously
                       context,
                     ).pushNamedAndRemoveUntil(loginRoute, (_) => false);
                   }
