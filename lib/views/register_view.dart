@@ -5,8 +5,8 @@ import 'package:quicknote/constants/routes.dart';
 import 'package:quicknote/firebase_options.dart';
 import 'package:quicknote/services/auth/auth_exceptions.dart';
 import 'package:quicknote/services/auth/auth_service.dart';
+import 'package:quicknote/utilities/dialog/error_dialog.dart';
 
-import 'package:quicknote/utilities/show_error_dialogue.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

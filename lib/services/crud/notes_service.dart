@@ -1,3 +1,5 @@
+// ignore_for_file: empty_catches, constant_identifier_names
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -171,6 +173,7 @@ class NotesService {
       throw CouldNotFindUser();
     }
 
+    // ignore: unused_local_variable
     final noteText = text.isEmpty ? '' : text;
     //const text = '';
     // create the note

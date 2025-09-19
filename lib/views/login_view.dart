@@ -4,7 +4,7 @@ import 'dart:developer' as devtools show log;
 import 'package:quicknote/constants/routes.dart';
 import 'package:quicknote/services/auth/auth_exceptions.dart';
 import 'package:quicknote/services/auth/auth_service.dart';
-import 'package:quicknote/utilities/show_error_dialogue.dart';
+import 'package:quicknote/utilities/dialog/error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});

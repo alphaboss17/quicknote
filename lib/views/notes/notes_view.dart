@@ -3,6 +3,8 @@ import 'package:quicknote/constants/routes.dart';
 import 'package:quicknote/enums/menu_action.dart';
 import 'package:quicknote/services/auth/auth_service.dart';
 import 'package:quicknote/services/crud/notes_service.dart';
+import 'package:quicknote/utilities/dialog/logout_dialog.dart';
+import 'package:quicknote/views/notes/notes_list_view.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -37,7 +39,7 @@ class _NotesViewState extends State<NotesView> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(newNoteRoute);
+              Navigator.of(context).pushNamed(createOrUpdateNoteRoute);
             },
             icon: const Icon(Icons.add),
           ),
@@ -79,45 +81,28 @@ class _NotesViewState extends State<NotesView> {
                     case ConnectionState.waiting:
                       return const Text('Waiting for all notes');
                     case ConnectionState.active:
-                      // if (snapshot.hasData) {
-                      //   final allNotes = snapshot.data as List<DatabaseNote>;
-                      //   return ListView.builder(
-                      //     itemCount: allNotes.length,
-                      //     itemBuilder: (context, index) {
-                      //       return const Text('Item');
-                      //     },
-                      //   );
-                      // } else {
-                      //   return const CircularProgressIndicator(
-                      //     color: Colors.yellow,
-                      //   );
-                      // }  Option 1
-
                       if (snapshot.hasData) {
-                        final allNotes =
-                            snapshot.data as Iterable<DatabaseNote>;
-                        // new addition to check
+                        final allNotes = snapshot.data as List<DatabaseNote>;
+                        //snapshot.data as Iterable<DatabaseNote>;
+                        return NotesListView(
+                          notes: allNotes,
+                          onDeleteNote: (note) async {
+                            await _notesService.deleteNote(id: note.id);
+                          },
+                          onTap: (note) {
+                            //make async
+                            Navigator.of(context).pushNamed(
+                              createOrUpdateNoteRoute,
+                              arguments: note,
+                            );
+                          },
+                        );
+
                         if (allNotes.isEmpty) {
                           return const Center(
                             child: Text('No notes yet. create note'),
                           );
-                        } // new addition to check
-                        return ListView.builder(
-                          itemCount: allNotes.length,
-                          itemBuilder: (context, index) {
-                            final note = allNotes.elementAt(
-                              index,
-                            ); // new addition to check
-                            return ListTile(
-                              title: Text(
-                                note.text,
-                                maxLines: 1,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
-                          },
-                        );
+                        }
                       } else {
                         return const CircularProgressIndicator(
                           color: Colors.yellow,
@@ -142,29 +127,3 @@ class _NotesViewState extends State<NotesView> {
 // extension on Iterable<DatabaseNote> {
 //   operator [](int other) {}
 // }
-
-Future<bool> showLogOutDialog(BuildContext context) {
-  return showDialog<bool>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Sign Out'),
-        content: const Text('Are you sure you want to sign out?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: const Text('Log out'),
-          ),
-        ],
-      );
-    },
-  ).then((value) => value ?? false);
-}
