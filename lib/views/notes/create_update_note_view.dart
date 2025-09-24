@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:quicknote/services/auth/auth_service.dart';
+import 'package:quicknote/utilities/dialog/cannot_share_empty_note_dialog.dart';
 import 'package:quicknote/utilities/generics/get_arguments.dart';
 import 'package:quicknote/services/cloud/cloud_note.dart';
 import 'package:quicknote/services/cloud/firebase_cloud_storage.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CreateUpdateNoteView extends StatefulWidget {
   const CreateUpdateNoteView({super.key});
@@ -30,10 +32,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
       return;
     }
     final text = _textController.text;
-    await _notesService.updateNote(
-      documentId: note.documentId,
-      text: text,
-    );
+    await _notesService.updateNote(documentId: note.documentId, text: text);
   }
 
   void _setupTextControllerListener() {
@@ -62,9 +61,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
       // Force reopen the database
       // await _notesService.forceReopenDatabase();
 
-      final newNote = await _notesService.createNewNote(
-        ownerUserId: userId,
-      );
+      final newNote = await _notesService.createNewNote(ownerUserId: userId);
       _note = newNote;
 
       return newNote;
@@ -73,7 +70,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     }
   }
 
-  void _deleteNoteIfTextIsEmpty()  {
+  void _deleteNoteIfTextIsEmpty() {
     final note = _note;
     if (_textController.text.isEmpty && note != null) {
       _notesService.deleteNote(documentId: note.documentId);
@@ -84,10 +81,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     final note = _note;
     final text = _textController.text;
     if (note != null && text.isNotEmpty) {
-      await _notesService.updateNote(
-        documentId: note.documentId,
-        text: text,
-      );
+      await _notesService.updateNote(documentId: note.documentId, text: text);
     }
   }
 
@@ -105,6 +99,20 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Note'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final text = _textController.text;
+              if (_note == null || text.isEmpty) {
+                await showCannotShareEmptyNoteDialog(context);
+              } else {
+                // ignore: deprecated_member_use
+                Share.share(text);
+              }
+            },
+            icon: const Icon(Icons.share),
+          ),
+        ],
         backgroundColor: Colors.blue,
       ),
 

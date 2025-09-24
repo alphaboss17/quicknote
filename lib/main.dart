@@ -1,16 +1,15 @@
-// ignore_for_file: unused_import
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quicknote/constants/routes.dart';
-import 'package:quicknote/firebase_options.dart';
-import 'package:quicknote/services/auth/auth_service.dart';
+import 'package:quicknote/services/auth/bloc/auth_bloc.dart';
+import 'package:quicknote/services/auth/bloc/auth_event.dart';
+import 'package:quicknote/services/auth/bloc/auth_state.dart';
+import 'package:quicknote/services/auth/firebase_auth_provider.dart';
 import 'package:quicknote/views/login_view.dart';
 import 'package:quicknote/views/notes/create_update_note_view.dart';
 import 'package:quicknote/views/notes/notes_view.dart';
 import 'package:quicknote/views/register_view.dart';
 import 'package:quicknote/views/verify_email_view.dart';
-import 'dart:developer' as devtools show log;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +18,10 @@ void main() {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomePage(),
+      home: BlocProvider<AuthBloc>(
+        create: (context) => AuthBloc(FirebaseAuthProvider()),
+        child: const HomePage(),
+      ),
       routes: {
         //page routes
         loginRoute: (context) => const LoginView(),
@@ -37,24 +39,19 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: AuthService.firebase().initialize(),
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.done:
-            final user = AuthService.firebase().currentUser;
-            if (user != null) {
-              if (user.isEmailVerified) {
-                return NotesView();
-              } else {
-                return const VerifyEmailView();
-              }
-            } else {
-              return const LoginView();
-            }
-
-          default:
-            return const CircularProgressIndicator();
+    context.read<AuthBloc>().add(const AuthEventInitialize());
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        if (state is AuthStateLoggedIn) {
+          return const NotesView();
+        } else if (state is AuthStateNeedsVerification) {
+          return const VerifyEmailView();
+        } else if (state is AuthStateLoggedOut) {
+          return const LoginView();
+        } else {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
       },
     );
