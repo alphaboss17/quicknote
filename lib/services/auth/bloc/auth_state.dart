@@ -1,3 +1,4 @@
+// ignore_for_file: use_super_parameters
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:quicknote/services/auth/auth_user.dart';
 import 'package:equatable/equatable.dart';

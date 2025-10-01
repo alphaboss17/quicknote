@@ -15,7 +15,9 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  // bool _isPasswordVisible = false; /// visibility toggle
+  // bool _isPasswordVisible = false; ////Visibility toggle
+
+  /// visibility toggle
 
   late final TextEditingController _email;
   late final TextEditingController _password;
@@ -74,7 +76,8 @@ class _LoginViewState extends State<LoginView> {
                 autocorrect: false,
                 decoration: InputDecoration(
                   hintText: 'Please enter your password',
-                  // suffixIcon: IconButton(   Visbility toggle
+                  // suffixIcon: IconButton(
+                  //   // Visibility toggle
                   //   onPressed: () {
                   //     setState(() {
                   //       _isPasswordVisible = !_isPasswordVisible;

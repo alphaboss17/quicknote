@@ -75,7 +75,7 @@ class _NotesViewState extends State<NotesView> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return const Text('Waiting for all notes');
+              return const Center(child: CircularProgressIndicator());
             case ConnectionState.active:
               if (snapshot.hasData) {
                 final allNotes = snapshot.data as Iterable<CloudNote>;
