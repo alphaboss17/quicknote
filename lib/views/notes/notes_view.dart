@@ -92,10 +92,6 @@ class _NotesViewState extends State<NotesView> {
                     ).pushNamed(createOrUpdateNoteRoute, arguments: note);
                   },
                 );
-
-                if (allNotes.isEmpty) {
-                  return const Center(child: Text('No notes yet. create note'));
-                }
               } else {
                 return const CircularProgressIndicator(color: Colors.yellow);
               }

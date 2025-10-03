@@ -15,7 +15,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  // bool _isPasswordVisible = false; ////Visibility toggle
+  bool _isPasswordVisible = false;
 
   /// visibility toggle
 
@@ -70,25 +70,25 @@ class _LoginViewState extends State<LoginView> {
               ),
               TextField(
                 controller: _password,
-                // obscureText: !_isPasswordVisible, ///// visibility toggle
-                obscureText: true,
+                obscureText: !_isPasswordVisible, ///// visibility toggle
+
                 enableSuggestions: false,
                 autocorrect: false,
                 decoration: InputDecoration(
                   hintText: 'Please enter your password',
-                  // suffixIcon: IconButton(
-                  //   // Visibility toggle
-                  //   onPressed: () {
-                  //     setState(() {
-                  //       _isPasswordVisible = !_isPasswordVisible;
-                  //     });
-                  //   },
-                  //   icon: Icon(
-                  //     _isPasswordVisible
-                  //         ? Icons.visibility
-                  //         : Icons.visibility_off,
-                  //   ),
-                  // ),
+                  suffixIcon: IconButton(
+                    // Visibility toggle
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                  ),
                 ),
               ),
               TextButton(
